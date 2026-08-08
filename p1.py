@@ -1,73 +1,86 @@
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
-# ----------------------------
-# HOUSE PRICE PREDICTION SYSTEM
-# ----------------------------
+# ---------------------------------
+# STUDENT MARKS PREDICTION SYSTEM
+# ---------------------------------
 
 # Sample Dataset
 data = {
-    "Area": [
-        1000, 1200, 1500, 1800, 2000,
-        2200, 2500, 2700, 3000, 3200,
-        900, 1100, 1400, 1700, 2100,
-        2300, 2600, 2900, 3100, 3300
+    "Study_Hours": [
+        1,2,3,4,5,
+        6,7,8,9,10,
+        2.5,3.5,4.5,5.5,6.5,
+        7.5,8.5,9.5,1.5,5
     ],
 
-    "Bedrooms": [
-        2,3,3,4,4,
-        5,5,6,6,7,
-        2,2,3,4,5,
-        5,6,6,7,7
+    "Attendance": [
+        60,65,70,75,80,
+        82,85,88,90,95,
+        68,72,77,81,84,
+        87,91,94,63,79
     ],
 
-    "Age": [
-        10,5,8,2,4,
-        3,1,2,1,1,
-        15,12,10,6,5,
-        4,3,2,1,1
-    ],
-
-    "Price": [
-        300000,350000,420000,500000,550000,
-        600000,680000,720000,800000,850000,
-        280000,310000,390000,470000,580000,
-        620000,700000,780000,840000,900000
+    "Marks": [
+        30,40,48,55,63,
+        70,76,83,90,98,
+        44,52,59,66,73,
+        80,86,94,35,61
     ]
 }
 
 df = pd.DataFrame(data)
 
 # Features
-X = df[["Area", "Bedrooms", "Age"]]
+X = df[["Study_Hours", "Attendance"]]
 
 # Target
-y = df["Price"]
+y = df["Marks"]
 
 # Train Model
 model = LinearRegression()
 model.fit(X, y)
 
 print("=" * 50)
-print("      HOUSE PRICE PREDICTION SYSTEM")
+print("      STUDENT MARKS PREDICTION")
 print("=" * 50)
 
 while True:
 
-    print("\nEnter House Details")
+    print("\nEnter Student Details")
 
-    area = float(input("Area (sq.ft): "))
-    bedrooms = int(input("Bedrooms: "))
-    age = int(input("Age of House: "))
+    hours = float(input("Study Hours per Day: "))
+    attendance = float(input("Attendance Percentage: "))
 
-    prediction = model.predict([[area, bedrooms, age]])
+    prediction = model.predict([[hours, attendance]])
 
-    print("\nPredicted House Price")
-    print("----------------------------------")
-    print(f"${prediction[0]:,.2f}")
+    if prediction[0] > 100:
+        prediction[0] = 100
 
-    choice = input("\nPredict another house? (y/n): ")
+    if prediction[0] < 0:
+        prediction[0] = 0
 
-    if choice.lower() != 'y':
+    print("\nPredicted Marks")
+    print("-" * 30)
+    print(f"{prediction[0]:.2f} / 100")
+
+    if prediction[0] >= 90:
+        grade = "A+"
+    elif prediction[0] >= 80:
+        grade = "A"
+    elif prediction[0] >= 70:
+        grade = "B"
+    elif prediction[0] >= 60:
+        grade = "C"
+    elif prediction[0] >= 50:
+        grade = "D"
+    else:
+        grade = "F"
+
+    print("Grade:", grade)
+
+    choice = input("\nPredict Another Student? (y/n): ")
+
+    if choice.lower() != "y":
         print("\nThank You!")
         break
